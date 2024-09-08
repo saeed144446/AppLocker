@@ -1,0 +1,36 @@
+[versions]
+agp = "8.4.1"
+applock = "3.0.2"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+legacySupportV4 = "1.0.0"
+material = "1.12.0"
+activity = "1.9.1"
+constraintlayout = "2.1.4"
+lifecycleProcess = "2.8.5"
+paperdb = "2.7.2"
+patternlockviewReactive = "1.0.0"
+sdpAndroid = "1.1.1"
+switchButton = "0.0.3"
+
+[libraries]
+applock = { module = "com.guardanis:applock", version.ref = "applock" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+legacy-support-v4 = { module = "androidx.legacy:legacy-support-v4", version.ref = "legacySupportV4" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycleProcess" }
+paperdb = { module = "io.github.pilgr:paperdb", version.ref = "paperdb" }
+patternlockview-reactive = { module = "com.andrognito.patternlockview:patternlockview-reactive", version.ref = "patternlockviewReactive" }
+sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
+switch-button = { module = "com.github.zcweng:switch-button", version.ref = "switchButton" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+

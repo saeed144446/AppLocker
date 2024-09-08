@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Settings"
+        android:icon="@drawable/ic_setting"
+        android:id="@+id/menu_settings"/>
+
+    <item
+        android:title="Remove Ads"
+        android:icon="@drawable/ic_removeads"
+        android:id="@+id/menu_remove_ads"/>
+
+    <item
+        android:title="Privacy Policy"
+        android:icon="@drawable/ic_privacy_policy"
+        android:id="@+id/menu_privacy_policy"/>
+
+    <item
+        android:title="More Apps"
+        android:icon="@drawable/ic_moreapps"
+        android:id="@+id/menu_more_apps"/>
+
+
+    <item
+        android:title="Share"
+        android:icon="@drawable/ic_share"
+        android:id="@+id/menu_share"/>
+
+    <item
+        android:title="Rate Us"
+        android:icon="@drawable/ic_rate_us"
+        android:id="@+id/menu_rate_us"/>
+
+
+</menu>
