@@ -68,6 +68,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:sb_uncheck_color="#EFEFF0"
+            app:sb_background="@color/switch_background"
             app:sb_checked_color="@color/colorPrimary"
             app:sb_show_indicator="false"
             android:layout_gravity="center_vertical"
@@ -141,6 +142,7 @@
             android:layout_centerVertical="true"
             app:sb_show_indicator="false"
             app:sb_uncheck_color="#EFEFF0"
+            app:sb_background="@color/switch_background"
             app:sb_checked_color="@color/colorPrimary"
             android:layout_gravity="center_vertical"
             app:track="@drawable/custom_track"
@@ -177,6 +179,7 @@
             android:layout_centerVertical="true"
             app:sb_show_indicator="false"
             app:sb_uncheck_color="#EFEFF0"
+            app:sb_background="@color/switch_background"
             app:sb_checked_color="@color/colorPrimary"
             android:layout_gravity="center_vertical"
             app:track="@drawable/custom_track"
@@ -213,6 +216,7 @@
             android:layout_centerVertical="true"
             app:sb_show_indicator="false"
             app:sb_uncheck_color="#EFEFF0"
+            app:sb_background="@color/switch_background"
             app:sb_checked_color="@color/colorPrimary"
             android:layout_gravity="center_vertical"
             app:track="@drawable/custom_track"
@@ -248,10 +252,11 @@
             app:sb_show_indicator="false"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            app:track="@drawable/custom_track"
+
+
             app:sb_uncheck_color="#EFEFF0"
-            app:sb_checked_color="@color/colorPrimary"
-            android:thumb="@drawable/custom_thumb"/>
+            app:sb_background="@color/switch_background"
+            app:sb_checked_color="@color/colorPrimary" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -262,7 +267,6 @@
 
 
     <RelativeLayout
-        android:id="@+id/lock_when"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:background="@drawable/ic_back_white"
@@ -277,15 +281,9 @@
             android:textColor="#2c2c2c"
             android:textSize="14sp"/>
 
-        <TextView
-            android:id="@+id/lock_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:tooltipText="After locking the screen"/>
 
         <ImageView
+            android:id="@+id/lock_when"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/arrow_more"
@@ -294,13 +292,15 @@
             android:layout_alignParentRight="true"/>
 
 
+
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
-            android:background="#DEDEDE"
-            android:textColor="#2c2c2c"/>
+            android:background="#DEDEDE"/>
     </RelativeLayout>
+
 
 
     <RelativeLayout
@@ -384,5 +384,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/line_color"/>
+
 
 </LinearLayout>

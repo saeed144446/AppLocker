@@ -9,14 +9,15 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name=".Utils.MyApplication"
+        android:name="com.example.robinblue.Utils.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -27,13 +28,15 @@
         android:theme="@style/Theme.LockerApp"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.LockActivity"
+            android:name="com.example.robinblue.Activity.PasswordLockAct"
             android:exported="true"
-            android:launchMode="singleInstance"
-            android:excludeFromRecents="true">
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.example.robinblue.Activity.PatternLockAct"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,37 +44,50 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.MainActivity"
-            android:exported="false"/>
+            android:name="com.example.robinblue.Activity.SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.example.robinblue.Activity.LockActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name="com.example.robinblue.Activity.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
 
         <receiver
-            android:name=".Broadcast.ReciverApplock"
+            android:name="com.example.robinblue.Broadcast.ReciverApplock"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
-
                 <data android:scheme="package" />
+
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".Broadcast.RestartServiesWhenStoped"
+            android:name="com.example.robinblue.Broadcast.RestartServiesWhenStoped"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </receiver>
 
         <service
-            android:name=".Services.ServiceApplock"
+            android:name="com.example.robinblue.Services.ServiceApplock"
             android:exported="false"
             android:foregroundServiceType="dataSync"
             tools:ignore="ForegroundServicePermission" />
         <service
-            android:name=".Services.ServiceApplockJobIntent"
+            android:name="com.example.robinblue.Services.ServiceApplockJobIntent"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />

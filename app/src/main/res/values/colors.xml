@@ -24,4 +24,11 @@
     <color name="transparent">#00000000</color>
     <color name="bg_white_normal">#ffffff</color>
     <color name="bg_white_selected">#f3f3f3</color>
+
+    <color name="pomegranate">#f4511e</color>
+
+
+    <color name="switch_background">#9C9B9B</color>
+    <color name="greyish">#aaa8a8</color>
+    <color name="mine_shaft">#303030</color>
 </resources>

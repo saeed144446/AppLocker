@@ -34,9 +34,10 @@
         android:layout_alignParentEnd="true"
         app:sb_enable_effect="false"
        app:sb_checked_color="@color/colorPrimary"
-
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+
+        app:sb_background="@color/switch_background"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="12dp"
         app:sb_show_indicator="false"

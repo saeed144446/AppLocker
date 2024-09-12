@@ -1,6 +1,6 @@
 <resources>
         
-    <string name="app_name">App Lock</string>
+    <string name="app_name">Applock Pro</string>
     <string name="lock_first_btn" formatted="false">Protection (% s)</string>
      
     <string name="lockscreen_access_pattern_cell_added">Added cell</string>
@@ -38,6 +38,7 @@
     <string name="num_create_text_01">Enter a 4-digit password to unlock</string>
         
     <string name="num_create_text_02">Enter again to confirm</string>
+    <string name="custom_pin_title">lock</string>
         
     <string name="num_create_text_03">Password does not match, please try again</string>
         
@@ -125,4 +126,12 @@
     <string name="your_name">Dhruva R</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="lib_name">PatternLockView</string>
+    <string name="message_pattern_dot_added">Dot added to pattern</string>
+    <string name="message_pattern_started">Pattern drawing started</string>
+    <string name="message_pattern_detected">Pattern drawing completed</string>
+    <string name="message_pattern_cleared">Pattern cleared</string>
+
 </resources>
