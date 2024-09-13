@@ -1,3 +1,4 @@
+
 package com.example.robinblue.Services;
 
 import android.app.Notification;
@@ -115,31 +116,59 @@ public class ServiceApplock extends Service {
             return; // No current app detected
         }
 
-// Check if the current app is locked
-
+        // Get the user's lock condition setting from PaperDB
+        int lockCondition = Paper.book().read("lock_condition", 0);  // Default to "Immediately" (position 0)
 
         // Check if the current app is locked
         if (isAppLocked(currentApp)) {
-            if (!isAppUnlocked(currentApp)) {
+            boolean shouldLock = false;
+
+            switch (lockCondition) {
+                case 0:  // Immediately
+                    shouldLock = !currentApp.equals(lastUnlockedApp);
+
+                    break;
+
+                case 1:  // When device is locked
+                    shouldLock = new Utils(this).isDeviceLocked() || hasOneMinutePassedSinceLastAppExit();
+        // Assume this method checks if the device is locked
+                    break;
+
+                case 2:  // When device is unlocked or after exiting app
+                    shouldLock = new Utils(this).isDeviceLocked() || !currentApp.equals(lastUnlockedApp);
+                    break;
+
+                case 3:  // When device is locked or 1 minute after exiting app
+                    shouldLock = new Utils(this).isDeviceLocked() || hasOneMinutePassedSinceLastAppExit();
+                    break;
+            }
+
+            if (shouldLock && !isAppUnlocked(currentApp)) {
                 Log.d("ServiceApplock", "App is locked and not unlocked, sending broadcast to lock");
                 Intent intent = new Intent(this, ReciverApplock.class);
                 intent.putExtra("currentApp", currentApp);
                 sendBroadcast(intent);
-            } else {
-                // Set a flag to lock the app again
+            } else if (!shouldLock) {
                 Paper.book().write("relock_" + currentApp, true);
             }
         }
 
-// If switching apps, relock the previous one
+        // If switching apps, relock the previous one
         if (lastUnlockedApp != null && !lastUnlockedApp.equals(currentApp)) {
             Log.d("ServiceApplock", "Relocking previous app: " + lastUnlockedApp);
-            lockApp(lastUnlockedApp); // Relock the previous app
+            lockApp(lastUnlockedApp);  // Relock the previous app
         }
 
-// Set the last unlocked app to the current one
+        // Set the last unlocked app to the current one
         lastUnlockedApp = currentApp;
     }
+
+    // Example of method to check if 1 minute has passed since the last app exit
+    private boolean hasOneMinutePassedSinceLastAppExit() {
+        long lastAppExitTime = Paper.book().read("last_app_exit_time", 0L);
+        return System.currentTimeMillis() - lastAppExitTime > 60000;
+    }
+
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {

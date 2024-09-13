@@ -14,9 +14,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.robinblue.Broadcast.ReciverApplock;
+import com.example.robinblue.Services.ServiceApplock;
 import com.robinblue.applockpro.R;
 import com.example.robinblue.Services.BackgroundManager;
-import com.example.robinblue.Services.ServiceApplock;
+
 import com.example.robinblue.Utils.Utils;
 import com.guardanis.applock.AppLock;
 import com.guardanis.applock.activities.LockCreationActivity;

@@ -2,6 +2,7 @@ package com.example.robinblue.Utils;
 
 import android.app.ActivityManager;
 import android.app.AppOpsManager;
+import android.app.KeyguardManager;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -100,5 +101,20 @@ public class Utils {
     }
     public String getLockedApp() {
         return Paper.book().read("lockedApp", "");
+    }
+
+    public boolean isDeviceLocked() {
+        KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+
+        if (keyguardManager != null) {
+            // Check if the device is locked
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                return keyguardManager.isDeviceLocked();
+            } else {
+                return keyguardManager.inKeyguardRestrictedInputMode();
+            }
+        }
+
+        return false; // Return false if we can't determine the lock state
     }
 }

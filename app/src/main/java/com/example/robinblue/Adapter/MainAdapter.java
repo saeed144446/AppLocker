@@ -33,7 +33,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         this.utils = new Utils(mContext);
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,18 +47,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.mAppName.setText(appItem.getName());
         String appPackageName = appItem.getPackagename();
 
-        // Correctly set the switch state based on the current lock status
         boolean isLocked = utils.isLocked(appPackageName);
-        holder.mSwitchCompat.setOnCheckedChangeListener(null); // Remove any existing listener
-        holder.mSwitchCompat.setChecked(isLocked); // Set the correct state
+        holder.mSwitchCompat.setOnCheckedChangeListener(null);
+        holder.mSwitchCompat.setChecked(isLocked);
 
         holder.mSwitchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 utils.lockApp(appPackageName);
-                Toast.makeText(mContext, appItem.getName()+" is Locked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, appItem.getName() + " is Locked", Toast.LENGTH_SHORT).show();
             } else {
                 utils.unlockApp(appPackageName);
-                Toast.makeText(mContext, appItem.getName()+" is Unlocked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, appItem.getName() + " is Unlocked", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -67,11 +65,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             if (utils.isLocked(appPackageName)) {
                 holder.mSwitchCompat.setChecked(false);
                 utils.unlockApp(appPackageName);
-                Toast.makeText(mContext, appItem.getName()+" is Locked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, appItem.getName() + " is Unlocked", Toast.LENGTH_SHORT).show();
             } else {
                 holder.mSwitchCompat.setChecked(true);
                 utils.lockApp(appPackageName);
-                Toast.makeText(mContext, appItem.getName()+" is Unlocked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, appItem.getName() + " is Locked", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -81,7 +79,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         return appItemsList.size();
     }
 
-    // Inner ViewHolder Class
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView mAppIcon;
         public TextView mAppName;

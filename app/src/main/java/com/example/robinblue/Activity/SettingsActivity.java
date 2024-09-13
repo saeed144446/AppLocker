@@ -1,21 +1,21 @@
 package com.example.robinblue.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.robinblue.PatternLockView.PatternLockView;
+import com.example.robinblue.Services.ServiceApplock;
 import com.robinblue.applockpro.R;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.OnMenuItemClickListener;
@@ -26,50 +26,52 @@ import com.suke.widget.SwitchButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class SettingsActivity extends AppCompatActivity {
 
     private ImageView btnBack;
     private RelativeLayout topLayout;
-    private SwitchButton appLockSwitch, lockScreenSwitch, intruderSelfieSwitch, showHidePatternSwitch, vibrateSwitch;
-    private RelativeLayout  changePwdLayout, aboutMeLayout;
-
     private ImageView lockWhenLayout;
     private PowerMenu powerMenu;
+    private SwitchButton vibrationSwitch, hidepatternSwitch;
+    private int selectedPosition = 0;
+
+    private PatternLockView patternLockView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Initialize PaperDB
+        Paper.init(this);
+
         btnBack = findViewById(R.id.btn_back);
         topLayout = findViewById(R.id.top_layout);
-        appLockSwitch = findViewById(R.id.checkbox_app_lock_on_off);
-        lockScreenSwitch = findViewById(R.id.checkbox_lock_screen_switch_on_phone_lock);
-        intruderSelfieSwitch = findViewById(R.id.checkbox_intruder_selfie);
-        showHidePatternSwitch = findViewById(R.id.checkbox_show_hide_pattern);
-        vibrateSwitch = findViewById(R.id.checkbox_vibrate);
         lockWhenLayout = findViewById(R.id.lock_when);
-        changePwdLayout = findViewById(R.id.btn_change_pwd);
-        aboutMeLayout = findViewById(R.id.about_me);
+        vibrationSwitch = findViewById(R.id.checkbox_vibrate);
+        hidepatternSwitch = findViewById(R.id.checkbox_show_hide_pattern);
+
+        boolean isPatternHide = Paper.book().read("hide_enabled", false);
+        hidepatternSwitch.setChecked(isPatternHide);
 
 
-        // Spinner setup
-        String[] lockTimes = {"Immediately", "When device is locked", "When device is unlocked or after exiting app", "When device is locked or in 1 minute after exiting app"};
-
+        boolean isVibrationEnabled = Paper.book().read("vibration_enabled", false);
+        vibrationSwitch.setChecked(isVibrationEnabled);  // Set the switch state based on the saved value
 
         // PowerMenu setup
         List<PowerMenuItem> list = new ArrayList<>();
         list.add(new PowerMenuItem("Immediately", false));
         list.add(new PowerMenuItem("When device is locked", false));
-        list.add(new PowerMenuItem("When device is unlocked or after exiting app", false));
+        list.add(new PowerMenuItem("When device is locked or after exiting app", false));
         list.add(new PowerMenuItem("When device is locked or in 1 minute after exiting app", false));
 
-
         powerMenu = new PowerMenu.Builder(this)
-                .addItemList(list) // Menu items
-                .setAnimation(MenuAnimation.DROP_DOWN) // Animation
-                .setMenuRadius(10f) // Corner radius
-                .setMenuShadow(10f) // Shadow
+                .addItemList(list)
+                .setAnimation(MenuAnimation.DROP_DOWN)
+                .setMenuRadius(10f)
+                .setMenuShadow(10f)
                 .setWidth(500)
                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.font_deep_gray))
                 .setTextGravity(Gravity.CENTER)
@@ -81,35 +83,31 @@ public class SettingsActivity extends AppCompatActivity {
                 .build();
 
         // Set OnClickListener for lockWhenLayout to show PowerMenu
-        lockWhenLayout.setOnClickListener(v -> {
-            powerMenu.showAsDropDown(lockWhenLayout); // Show PowerMenu below the layout
-        });
+        lockWhenLayout.setOnClickListener(v -> powerMenu.showAsDropDown(lockWhenLayout));
 
-        btnBack.setOnClickListener(v -> {
-            // Handle back button press
-            finish();
-        });
+        // Load the previously saved lock condition (if any) from PaperDB
+        selectedPosition = Paper.book().read("lock_condition", 0);  // Default to "Immediately" (position 0)
+        powerMenu.setSelectedPosition(selectedPosition);
 
-        changePwdLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(SettingsActivity.this, PatternLockAct.class);
-            intent.putExtra("change_pattern", true);
-            startActivity(intent);
-        });
+        btnBack.setOnClickListener(v -> finish());
 
-        showHidePatternSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Handle switch state change
-            if (isChecked) {
-                // Switch is on
-            } else {
-                // Switch is off
+        hidepatternSwitch.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (isChecked) {
+                    Paper.book().write("hide_enabled", true);
+                } else {
+                    Paper.book().write("hide_enabled", false);
+                }
             }
         });
     }
 
     // Listener for PowerMenu item clicks
     private final OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = (position, item) -> {
-       // Toast.makeText(SettingsActivity.this, item., Toast.LENGTH_SHORT).show();
-        powerMenu.setSelectedPosition(position); // Change selected item
+        selectedPosition = position;  // Save the selected position
+        Paper.book().write("lock_condition", selectedPosition);  // Save to PaperDB
+        powerMenu.setSelectedPosition(position);  // Update the PowerMenu's selected item
         powerMenu.dismiss();
     };
 }
