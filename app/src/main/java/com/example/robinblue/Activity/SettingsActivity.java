@@ -32,6 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private ImageView btnBack;
     private RelativeLayout topLayout;
+
     private ImageView lockWhenLayout;
     private PowerMenu powerMenu;
     private SwitchButton vibrationSwitch, hidepatternSwitch,fingerPrintSwitch,selfieIntruderSwitch;
@@ -119,9 +120,9 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 if (isChecked){
-                    Paper.book().write("fingerprint_enabled", false);
-                }else{
                     Paper.book().write("fingerprint_enabled", true);
+                }else{
+                    Paper.book().write("fingerprint_enabled", false);
                 }
             }
         });
