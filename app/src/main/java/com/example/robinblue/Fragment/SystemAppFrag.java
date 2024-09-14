@@ -38,20 +38,14 @@ public class SystemAppFrag extends Fragment {
 
         return view;
     }
-
-
-
-
     private ArrayList<AppItem> getAllApps() {
+
         ArrayList<AppItem> results = new ArrayList<>();
-
         PackageManager packageManager = getContext().getPackageManager();
-
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
         List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(intent, 0);
-
         for (ResolveInfo resolveInfo : resolveInfoList) {
             ActivityInfo activityInfo = resolveInfo.activityInfo;
 

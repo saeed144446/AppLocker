@@ -7,13 +7,11 @@ public class AppItem {
     private Drawable icon;
     private String name ;
     private String packagename;
-
     public AppItem(Drawable icon, String name, String packagename) {
         this.icon = icon;
         this.name = name;
         this.packagename = packagename;
     }
-
     public Drawable getIcon() {
         return icon;
     }

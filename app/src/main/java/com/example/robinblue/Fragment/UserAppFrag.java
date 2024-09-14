@@ -37,10 +37,7 @@ public class UserAppFrag extends Fragment {
         recyclerView.setAdapter(adapter);
         return view;
     }
-
     // Add the getAdapter() method
-
-
     private ArrayList<AppItem> getAllApps() {
         ArrayList<AppItem> results = new ArrayList<>();
 
@@ -54,7 +51,6 @@ public class UserAppFrag extends Fragment {
         for (ResolveInfo resolveInfo : resolveInfoList) {
             ActivityInfo activityInfo = resolveInfo.activityInfo;
             String packageName = activityInfo.packageName;
-
             // Check if the app is a system app
             boolean isSystemApp = (activityInfo.applicationInfo.flags & android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0;
 

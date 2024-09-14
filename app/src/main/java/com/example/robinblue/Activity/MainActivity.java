@@ -6,15 +6,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -29,11 +31,10 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
     private static final int OVERLAY_PERMISSION_REQUEST_CODE = 100;
     private static final int USAGE_ACCESS_PERMISSION_REQUEST_CODE = 101;
 
-    private SearchView mEditSearch;
+    private EditText search_view;
     public ArrayList<AppItem> appListArrayList;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -42,27 +43,40 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private ImageView menu_button;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mEditSearch = findViewById(R.id.search_view);
+        search_view = findViewById(R.id.search_app);
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
         drawerLayout = findViewById(R.id.drawerlayout);
         navigationView = findViewById(R.id.navigation_view);
         menu_button = findViewById(R.id.btn_back);
-
         menu_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 } else {
                     drawerLayout.openDrawer(GravityCompat.START);
                 }
+            }
+        });
+
+        search_view.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+//                    filter(s.toString());
             }
         });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -70,20 +84,20 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.menu_settings){
+                if (id == R.id.menu_settings) {
                     startActivity(new Intent(MainActivity.this, SettingsActivity.class));
 
-                } else if (id==R.id.menu_remove_ads) {
+                } else if (id == R.id.menu_remove_ads) {
 
 
-                } else if (id==R.id.menu_privacy_policy) {
+                } else if (id == R.id.menu_privacy_policy) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://robinbluepage.blogspot.com/p/privacy-policy.html"));
                     startActivity(intent);
 
-                } else if (id==R.id.menu_more_apps) {
+                } else if (id == R.id.menu_more_apps) {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/search?q=pub:Robin+Blue+Gaming")));
 
-                }else if (id==R.id.menu_share) {
+                } else if (id == R.id.menu_share) {
                     Intent shareIntent = new Intent();
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_TEXT,
@@ -91,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     shareIntent.setType("text/plain");
                     startActivity(shareIntent);
 
-                }else if (id==R.id.menu_rate_us){
+                } else if (id == R.id.menu_rate_us) {
                     try {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(("market://details?id=" + getPackageName()))));
                     } catch (ActivityNotFoundException e1) {
@@ -107,12 +121,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         tabLayout.addTab(tabLayout.newTab().setText("SYSTEM APPS"));
         tabLayout.addTab(tabLayout.newTab().setText("USER APPS"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-
         // Initialize the adapter
         adapter = new MyAdapter(this, getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
@@ -141,14 +152,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkAndRequestPermissions() {
-        // Check if Usage Access permission is granted
         if (!Utils.checkPermission(this)) {
             requestUsageAccessPermission();
         }
 
-        // Check if Overlay (Draw over other apps) permission is granted
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-            requestOverlayPermission();
+            if (isXiaomiDevice()) {
+                requestOverlayPermissionXiaomi();
+            } else {
+                requestOverlayPermission();
+            }
         }
     }
 
@@ -163,12 +176,24 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
     }
 
+    private void requestOverlayPermissionXiaomi() {
+        try {
+            Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
+            intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
+            intent.putExtra("extra_pkgname", getPackageName());
+            startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+        } catch (Exception e) {
+            // Fallback if Xiaomi-specific intent fails
+            requestOverlayPermission();
+        }
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == OVERLAY_PERMISSION_REQUEST_CODE) {
-            // Check if the overlay permission is granted
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!Settings.canDrawOverlays(this)) {
                     Toast.makeText(this, "Overlay permission is required for app lock functionality", Toast.LENGTH_SHORT).show();
@@ -177,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (requestCode == USAGE_ACCESS_PERMISSION_REQUEST_CODE) {
-            // Check if the usage access permission is granted
             if (!Utils.checkPermission(this)) {
                 Toast.makeText(this, "Usage Access permission is required for app lock functionality", Toast.LENGTH_SHORT).show();
             }
@@ -187,15 +211,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Ensure that permissions are granted before proceeding with app logic
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (!Utils.checkPermission(this)) {
                 requestUsageAccessPermission();
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-                requestOverlayPermission();
+                if (isXiaomiDevice()) {
+                    requestOverlayPermissionXiaomi();
+                } else {
+                    requestOverlayPermission();
+                }
             }
         }
+    }
+
+
+    private boolean isXiaomiDevice() {
+        return "Xiaomi".equalsIgnoreCase(Build.MANUFACTURER);
     }
 
 

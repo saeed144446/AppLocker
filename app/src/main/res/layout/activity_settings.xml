@@ -130,12 +130,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/lock_immediately_after_locking_the_screen"
+            android:text="Fingerprint unlock"
             android:textColor="#2c2c2c"
             android:textSize="14sp"/>
 
         <com.suke.widget.SwitchButton
-            android:id="@+id/checkbox_lock_screen_switch_on_phone_lock"
+            android:id="@+id/fingerprint_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

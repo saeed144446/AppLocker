@@ -12,16 +12,13 @@ import com.example.robinblue.Fragment.SystemAppFrag;
 import com.example.robinblue.Fragment.UserAppFrag;
 
 public class MyAdapter extends FragmentPagerAdapter {
-
     private Context myContext;
     int totalTabs;
-
     public MyAdapter(Context context, FragmentManager fm, int totalTabs) {
         super(fm);
         myContext = context;
         this.totalTabs = totalTabs;
     }
-
     // this is for fragment tabs
     @Override
     public Fragment getItem(int position) {

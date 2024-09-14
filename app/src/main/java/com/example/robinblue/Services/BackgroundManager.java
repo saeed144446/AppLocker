@@ -21,14 +21,12 @@ public class BackgroundManager {
     private BackgroundManager() {
         // Private constructor to enforce singleton pattern
     }
-
     public static synchronized BackgroundManager getInstance() {
         if (instance == null) {
             instance = new BackgroundManager();
         }
         return instance;
     }
-
     public BackgroundManager init(Context context) {
         this.context = context.getApplicationContext(); // Ensure context is application context
         return this;
@@ -45,7 +43,6 @@ public class BackgroundManager {
         }
         return false;
     }
-
     public void startService() {
         Intent intent = new Intent(context, ServiceApplock.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -58,7 +55,6 @@ public class BackgroundManager {
             }
         }
     }
-
     public void stopService(Class<?> serviceClass) {
         if (isBackgroundRunning(serviceClass)) {
             context.stopService(new Intent(context, serviceClass));
@@ -89,7 +85,6 @@ public class BackgroundManager {
                 pendingIntent
         );
     }
-
     public void stopAlarmManager() {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, ReciverApplock.class);

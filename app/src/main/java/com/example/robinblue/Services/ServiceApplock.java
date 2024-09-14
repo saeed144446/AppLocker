@@ -30,7 +30,7 @@ public class ServiceApplock extends Service {
 
     private static final String CHANNEL_ID = "AppLockServiceChannel";
     private Timer timer;
-    private static final long CHECK_INTERVAL_MS = 1; // Check every second
+    private static final long CHECK_INTERVAL_MS = 1;
     private String lastUnlockedApp = null;
 
     @Override
@@ -95,12 +95,12 @@ public class ServiceApplock extends Service {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+
                 runAppLock();
 
             }
         }, 0, CHECK_INTERVAL_MS);
     }
-
     private void stopAppLockChecking() {
         if (timer != null) {
             timer.cancel();

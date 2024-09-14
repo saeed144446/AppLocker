@@ -27,9 +27,21 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
 dependencies {
+    // Core CameraX libraries
+    implementation "androidx.camera:camera-core:1.1.0"
+    implementation "androidx.camera:camera-lifecycle:1.1.0"
 
+    // Missing camera2 implementation
+    implementation "androidx.camera:camera-camera2:1.1.0"  // This is the missing dependency
+
+    // Optional - CameraView (UI component)
+    implementation "androidx.camera:camera-view:1.1.0"
+
+    // Optional - Extensions like HDR or Night Mode
+    implementation "androidx.camera:camera-extensions:1.1.0"
+
+    // Other existing dependencies
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
@@ -38,7 +50,6 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
-
     implementation libs.sdp.android
     implementation libs.applock
     implementation libs.paperdb
@@ -49,5 +60,6 @@ dependencies {
     implementation "com.github.skydoves:powermenu:2.2.4"
     implementation 'com.github.AppIntro:AppIntro:6.3.1'
     implementation 'com.github.Shashank02051997:FancyAlertDialog-Android:0.3'
-
+    implementation 'androidx.biometric:biometric:1.2.0-alpha03'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

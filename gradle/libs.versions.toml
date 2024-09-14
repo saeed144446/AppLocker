@@ -14,6 +14,8 @@ paperdb = "2.7.2"
 patternlockviewReactive = "1.0.0"
 sdpAndroid = "1.1.1"
 switchButton = "0.0.3"
+cameraCore = "1.3.4"
+cameraLifecycle = "1.3.4"
 
 [libraries]
 applock = { module = "com.guardanis:applock", version.ref = "applock" }
@@ -30,6 +32,8 @@ paperdb = { module = "io.github.pilgr:paperdb", version.ref = "paperdb" }
 patternlockview-reactive = { module = "com.andrognito.patternlockview:patternlockview-reactive", version.ref = "patternlockviewReactive" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 switch-button = { module = "com.github.zcweng:switch-button", version.ref = "switchButton" }
+camera-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraCore" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

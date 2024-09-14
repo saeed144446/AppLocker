@@ -34,16 +34,14 @@ public class SettingsActivity extends AppCompatActivity {
     private RelativeLayout topLayout;
     private ImageView lockWhenLayout;
     private PowerMenu powerMenu;
-    private SwitchButton vibrationSwitch, hidepatternSwitch;
+    private SwitchButton vibrationSwitch, hidepatternSwitch,fingerPrintSwitch,selfieIntruderSwitch;
     private int selectedPosition = 0;
-
     private PatternLockView patternLockView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         // Initialize PaperDB
         Paper.init(this);
 
@@ -52,14 +50,19 @@ public class SettingsActivity extends AppCompatActivity {
         lockWhenLayout = findViewById(R.id.lock_when);
         vibrationSwitch = findViewById(R.id.checkbox_vibrate);
         hidepatternSwitch = findViewById(R.id.checkbox_show_hide_pattern);
+        fingerPrintSwitch = findViewById(R.id.fingerprint_switch);
+        selfieIntruderSwitch = findViewById(R.id.checkbox_intruder_selfie);
+
+        boolean isSelfieIntruderEnabled = Paper.book().read("selfie_intruder_enabled", false);
+        selfieIntruderSwitch.setChecked(isSelfieIntruderEnabled);
 
         boolean isPatternHide = Paper.book().read("hide_enabled", false);
         hidepatternSwitch.setChecked(isPatternHide);
 
-
         boolean isVibrationEnabled = Paper.book().read("vibration_enabled", false);
-        vibrationSwitch.setChecked(isVibrationEnabled);  // Set the switch state based on the saved value
-
+        vibrationSwitch.setChecked(isVibrationEnabled);
+        boolean isFingerPrintEnabled = Paper.book().read("fingerprint_enabled", false);// Set the switch state based on the saved value
+        fingerPrintSwitch.setChecked(isFingerPrintEnabled);
         // PowerMenu setup
         List<PowerMenuItem> list = new ArrayList<>();
         list.add(new PowerMenuItem("Immediately", false));
@@ -84,12 +87,23 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Set OnClickListener for lockWhenLayout to show PowerMenu
         lockWhenLayout.setOnClickListener(v -> powerMenu.showAsDropDown(lockWhenLayout));
-
         // Load the previously saved lock condition (if any) from PaperDB
         selectedPosition = Paper.book().read("lock_condition", 0);  // Default to "Immediately" (position 0)
         powerMenu.setSelectedPosition(selectedPosition);
-
         btnBack.setOnClickListener(v -> finish());
+
+
+        vibrationSwitch.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+
+                if (isChecked) {
+                    Paper.book().write("vibration_enabled", true);
+                } else {
+                    Paper.book().write("vibration_enabled", false);
+                }
+            }
+        });
 
         hidepatternSwitch.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
@@ -101,8 +115,29 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+        fingerPrintSwitch.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (isChecked){
+                    Paper.book().write("fingerprint_enabled", false);
+                }else{
+                    Paper.book().write("fingerprint_enabled", true);
+                }
+            }
+        });
 
+        selfieIntruderSwitch.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                if (isChecked){
+                    Paper.book().write("selfie_intruder_enabled", true);
+                }else{
+                    Paper.book().write("selfie_intruder_enabled", false);
+                }
+            }
+        });
+
+    }
     // Listener for PowerMenu item clicks
     private final OnMenuItemClickListener<PowerMenuItem> onMenuItemClickListener = (position, item) -> {
         selectedPosition = position;  // Save the selected position
@@ -110,4 +145,5 @@ public class SettingsActivity extends AppCompatActivity {
         powerMenu.setSelectedPosition(position);  // Update the PowerMenu's selected item
         powerMenu.dismiss();
     };
+
 }
