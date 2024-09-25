@@ -87,6 +87,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         public SwitchButton mSwitchCompat;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
             mAppIcon = itemView.findViewById(R.id.app_icon);
             mAppName = itemView.findViewById(R.id.app_name);
             mSwitchCompat = itemView.findViewById(R.id.switch_compat);

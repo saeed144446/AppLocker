@@ -45,18 +45,23 @@
         <activity
             android:name="com.example.robinblue.Activity.PasswordLockAct"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+
+
+        </activity>
         <activity
             android:name="com.example.robinblue.Activity.PatternLockAct"
             android:excludeFromRecents="true"
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name="com.example.robinblue.Activity.SettingsActivity"

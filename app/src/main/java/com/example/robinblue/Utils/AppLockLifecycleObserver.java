@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
+import com.example.robinblue.Activity.PasswordLockAct;
 import com.example.robinblue.Activity.PatternLockAct;
 
 import io.paperdb.Paper;

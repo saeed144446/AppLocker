@@ -19,7 +19,7 @@ import com.robinblue.applockpro.R;
  * Optionally, {@link IndicatorDots} can be attached to this view to indicate the length of the input taken
  * Created by aritraroy on 31/05/16.
  */
-public class PinLockView extends RecyclerView {
+public class PinLockView extends RecyclerView implements PinLockListener {
 
     private static final int DEFAULT_PIN_LENGTH = 4;
     private static final int[] DEFAULT_KEY_SET = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
@@ -432,5 +432,20 @@ public class PinLockView extends RecyclerView {
      */
     public void attachIndicatorDots(IndicatorDots mIndicatorDots) {
         this.mIndicatorDots = mIndicatorDots;
+    }
+
+    @Override
+    public void onComplete(String pin) {
+
+    }
+
+    @Override
+    public void onEmpty() {
+
+    }
+
+    @Override
+    public void onPinChange(int pinLength, String intermediatePin) {
+
     }
 }

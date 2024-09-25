@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -31,7 +32,7 @@ import io.paperdb.Paper;
 public class SettingsActivity extends AppCompatActivity {
 
     private ImageView btnBack;
-    private RelativeLayout topLayout;
+    private RelativeLayout topLayout,changePasswordLayout;
 
     private ImageView lockWhenLayout;
     private PowerMenu powerMenu;
@@ -53,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         hidepatternSwitch = findViewById(R.id.checkbox_show_hide_pattern);
         fingerPrintSwitch = findViewById(R.id.fingerprint_switch);
         selfieIntruderSwitch = findViewById(R.id.checkbox_intruder_selfie);
+        changePasswordLayout = findViewById(R.id.btn_change_pwd);
 
         boolean isSelfieIntruderEnabled = Paper.book().read("selfie_intruder_enabled", false);
         selfieIntruderSwitch.setChecked(isSelfieIntruderEnabled);
@@ -74,12 +76,11 @@ public class SettingsActivity extends AppCompatActivity {
         powerMenu = new PowerMenu.Builder(this)
                 .addItemList(list)
                 .setAnimation(MenuAnimation.DROP_DOWN)
-                .setMenuRadius(10f)
+                .setMenuRadius(5f)
                 .setMenuShadow(10f)
-                .setWidth(500)
+                .setWidth(600)
                 .setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.font_deep_gray))
                 .setTextGravity(Gravity.CENTER)
-                .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
                 .setSelectedTextColor(Color.WHITE)
                 .setMenuColor(Color.WHITE)
                 .setSelectedMenuColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
@@ -92,6 +93,15 @@ public class SettingsActivity extends AppCompatActivity {
         selectedPosition = Paper.book().read("lock_condition", 0);  // Default to "Immediately" (position 0)
         powerMenu.setSelectedPosition(selectedPosition);
         btnBack.setOnClickListener(v -> finish());
+
+        changePasswordLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, PatternLockAct.class);
+                intent.putExtra("changePattern", true); // Pass an extra to indicate changing the pattern
+                startActivity(intent);
+            }
+        });
 
 
         vibrationSwitch.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -146,5 +156,8 @@ public class SettingsActivity extends AppCompatActivity {
         powerMenu.setSelectedPosition(position);  // Update the PowerMenu's selected item
         powerMenu.dismiss();
     };
+
+
+
 
 }
