@@ -32,7 +32,7 @@ import io.paperdb.Paper;
 public class SettingsActivity extends AppCompatActivity {
 
     private ImageView btnBack;
-    private RelativeLayout topLayout,changePasswordLayout;
+    private RelativeLayout topLayout,changePasswordLayout,vualt_lock_layout;
 
     private ImageView lockWhenLayout;
     private PowerMenu powerMenu;
@@ -55,6 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
         fingerPrintSwitch = findViewById(R.id.fingerprint_switch);
         selfieIntruderSwitch = findViewById(R.id.checkbox_intruder_selfie);
         changePasswordLayout = findViewById(R.id.btn_change_pwd);
+        vualt_lock_layout=findViewById(R.id.vualt_lock);
 
         boolean isSelfieIntruderEnabled = Paper.book().read("selfie_intruder_enabled", false);
         selfieIntruderSwitch.setChecked(isSelfieIntruderEnabled);
@@ -113,6 +114,16 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     Paper.book().write("vibration_enabled", false);
                 }
+            }
+        });
+
+        vualt_lock_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, VualtLockAct.class);
+                startActivity(intent);
+
+
             }
         });
 

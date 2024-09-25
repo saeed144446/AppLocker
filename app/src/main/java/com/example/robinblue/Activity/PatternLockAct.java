@@ -169,35 +169,46 @@ public class PatternLockAct extends AppCompatActivity {
 
                 // Handling the change pattern case
                 if (getIntent().getBooleanExtra("changePattern", false)) {
-                    if (utilspassword.getPassword() != null) {
-                        utilspassword.setPassword(pwd);
-                        status_password.setText("Pattern changed successfully!");
+                    // Check if user is in the first step of setting a new pattern
+                    if (utilspassword.isFirststep()) {
+                        userpassword = pwd; // Save the new pattern
+                        utilspassword.setFirststep(false); // Move to confirmation step
                         patternLockView.clearPattern();
-                         finish();
+                        status_password.setText("Confirm your new pattern");
                     } else {
-                        status_password.setText("No existing pattern found.");
-                        patternLockView.clearPattern();
+                        // Confirm the pattern
+                        if (userpassword.equals(pwd)) {
+                            utilspassword.setPassword(userpassword); // Save new confirmed pattern
+                            status_password.setText(utilspassword.STATUS_PASSWORD_CORRECT);
+                            finish(); // Finish activity after successful pattern change
+                        } else {
+                            status_password.setText(utilspassword.STATUS_PASSWORD_INCORRECT);
+                            patternLockView.clearPattern(); // Reset pattern lock for retry
+                        }
                     }
                     return;
                 }
 
+                // Handling first-time pattern setup
                 if (utilspassword.getPassword() == null) {
                     if (utilspassword.isFirststep()) {
-                        userpassword = pwd;
+                        userpassword = pwd; // Store the pattern for confirmation
                         utilspassword.setFirststep(false);
                         patternLockView.clearPattern();
-                        status_password.setText(utilspassword.STATUS_NEXT_STEP);
+                        status_password.setText(utilspassword.STATUS_NEXT_STEP); // Prompt for confirmation
                     } else {
+                        // Confirm pattern setup
                         if (userpassword.equals(pwd)) {
-                            utilspassword.setPassword(userpassword);
+                            utilspassword.setPassword(userpassword); // Save the new pattern
                             status_password.setText(utilspassword.STATUS_PASSWORD_CORRECT);
-                            proceedToNextActivity();
+                            proceedToNextActivity(); // Move to the next activity
                         } else {
                             status_password.setText(utilspassword.STATUS_PASSWORD_INCORRECT);
-                            patternLockView.clearPattern();
+                            patternLockView.clearPattern(); // Retry pattern confirmation
                         }
                     }
                 } else {
+                    // Verifying existing pattern during login/unlock
                     if (utilspassword.isCorrect(pwd)) {
                         status_password.setText(utilspassword.STATUS_PASSWORD_CORRECT);
                         patternLockView.setCorrectStateColor(ResourceUtils.getColor(PatternLockAct.this, R.color.colorPrimary));
@@ -205,18 +216,18 @@ public class PatternLockAct extends AppCompatActivity {
                     } else {
                         failedAttempts++;
                         if (failedAttempts >= MAX_ATTEMPTS) {
-                            disablePatternLock();
-                            if (isSelfieIntruder==true){
-                                selfieIntruderCapture.captureSelfie();
+                            disablePatternLock(); // Disable after max attempts
+                            if (isSelfieIntruder) {
+                                selfieIntruderCapture.captureSelfie(); // Capture selfie if intruder detected
                             }
-
                         } else {
                             status_password.setText(utilspassword.STATUS_PASSWORD_INCORRECT);
-                            patternLockView.clearPattern();
+                            patternLockView.clearPattern(); // Retry pattern
                         }
                     }
                 }
             }
+
 
             @Override
             public void onCleared() {
