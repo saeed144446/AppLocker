@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780102785882",
+    "project_id": "applockpro-e4747",
+    "storage_bucket": "applockpro-e4747.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780102785882:android:f99c67de377feb34cf3163",
+        "android_client_info": {
+          "package_name": "com.applockpro.fingerprint.password.pattern.vault.locker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6oR5i-_d5uyCnNs2puos5msTjFNjUBdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
