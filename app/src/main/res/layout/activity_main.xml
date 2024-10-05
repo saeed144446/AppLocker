@@ -18,8 +18,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_52sdp"
-            android:background="#EFEFF0">
+            android:background="@color/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@color/white"
+            android:layout_height="@dimen/_52sdp">
 
             <ImageView
                 android:id="@+id/btn_back"
@@ -27,6 +30,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:padding="@dimen/_12sdp"
+                android:tint="@color/white"
                 android:src="@drawable/ic_menubtn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/app_name"
-                android:textColor="#2c2c2c"
+                android:textColor="@color/white"
                 android:textSize="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_premimum"

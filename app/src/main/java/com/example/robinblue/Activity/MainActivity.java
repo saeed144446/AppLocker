@@ -252,4 +252,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean isXiaomiDevice() {
         return "Xiaomi".equalsIgnoreCase(Build.MANUFACTURER);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

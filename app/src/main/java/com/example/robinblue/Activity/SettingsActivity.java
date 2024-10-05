@@ -32,13 +32,13 @@ import io.paperdb.Paper;
 public class SettingsActivity extends AppCompatActivity {
 
     private ImageView btnBack;
-    private RelativeLayout topLayout,changePasswordLayout,vualt_lock_layout;
+    private RelativeLayout changePasswordLayout,vualt_lock_layout;
 
     private ImageView lockWhenLayout;
     private PowerMenu powerMenu;
     private SwitchButton vibrationSwitch, hidepatternSwitch,fingerPrintSwitch,selfieIntruderSwitch;
     private int selectedPosition = 0;
-    private PatternLockView patternLockView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
         Paper.init(this);
 
         btnBack = findViewById(R.id.btn_back);
-        topLayout = findViewById(R.id.top_layout);
         lockWhenLayout = findViewById(R.id.lock_when);
         vibrationSwitch = findViewById(R.id.checkbox_vibrate);
         hidepatternSwitch = findViewById(R.id.checkbox_show_hide_pattern);

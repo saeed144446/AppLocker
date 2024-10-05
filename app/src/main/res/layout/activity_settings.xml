@@ -63,8 +63,8 @@
 
         <com.suke.widget.SwitchButton
             android:id="@+id/checkbox_app_lock_on_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_23sdp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:sb_uncheck_color="#EFEFF0"
@@ -136,8 +136,8 @@
 
         <com.suke.widget.SwitchButton
             android:id="@+id/fingerprint_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_23sdp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:sb_show_indicator="false"
@@ -173,8 +173,8 @@
 
         <com.suke.widget.SwitchButton
             android:id="@+id/checkbox_intruder_selfie"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_23sdp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:sb_show_indicator="false"
@@ -210,8 +210,8 @@
 
         <com.suke.widget.SwitchButton
             android:id="@+id/checkbox_show_hide_pattern"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_23sdp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             app:sb_show_indicator="false"
@@ -246,8 +246,8 @@
 
         <com.suke.widget.SwitchButton
             android:id="@+id/checkbox_vibrate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_23sdp"
             android:layout_alignParentRight="true"
             app:sb_show_indicator="false"
             android:layout_centerVertical="true"

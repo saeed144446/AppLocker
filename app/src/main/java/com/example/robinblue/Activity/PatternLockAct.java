@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+
 import com.example.robinblue.Interface.PatternLockViewListener;
 import com.example.robinblue.Model.AppItem;
 import com.example.robinblue.Model.Password;
@@ -29,7 +29,6 @@ import com.example.robinblue.Services.BackgroundManager;
 import com.example.robinblue.Services.ServiceApplock;
 import com.example.robinblue.PatternLockView.PatternLockUtils;
 import com.example.robinblue.PatternLockView.PatternLockView;
-import com.example.robinblue.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class PatternLockAct extends AppCompatActivity {
 
     Password utilspassword;
     String userpassword;
-    TextView status_password, app_name;
+    TextView status_password, app_name, forgot_password;
     private String lockedApp;
     private boolean isBound = false;
     private Vibrator vibrator;
@@ -57,6 +56,7 @@ public class PatternLockAct extends AppCompatActivity {
     private static final int MAX_ATTEMPTS = 5;
     private static final long DISABLE_TIME = 60000; // 1 minute in milliseconds
 
+
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +67,7 @@ public class PatternLockAct extends AppCompatActivity {
         app_icon = findViewById(R.id.imageicon);
         app_name = findViewById(R.id.app_title);
         fingerprint_icon = findViewById(R.id.fingerprint);
+        forgot_password = findViewById(R.id.forgot_password);
 
         selfieIntruderCapture = new SelfieIntruderCapture(this);
         selfieIntruderCapture.startCamera();
@@ -74,8 +75,18 @@ public class PatternLockAct extends AppCompatActivity {
         selfieIntruderCapture = new SelfieIntruderCapture(this);
         selfieIntruderCapture.startCamera();
 
+        boolean resetPattern = getIntent().getBooleanExtra("resetPattern", false);
+        if (resetPattern) {
+            status_password.setText("Create Password");
+        }
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-
+                Intent intent = new Intent(PatternLockAct.this, ResetPatternLockAct.class);
+                startActivity(intent);
+            }
+        });
 
         utilspassword = new Password();
         status_password.setText(utilspassword.STATUS_FIRST_STEP);
@@ -83,9 +94,10 @@ public class PatternLockAct extends AppCompatActivity {
         boolean changePattern = getIntent().getBooleanExtra("changePattern", false);
         if (changePattern) {
             status_password.setText("Draw your new pattern");
+
         }
 
-        isSelfieIntruder = Paper.book().read("selfie_intruder_enabled", false);
+        isSelfieIntruder = Boolean.TRUE.equals(Paper.book().read("selfie_intruder_enabled", false));
 
         boolean isFingerPrint = Paper.book().read("fingerprint_enabled", false);
         if (isFingerPrint) {
@@ -124,6 +136,8 @@ public class PatternLockAct extends AppCompatActivity {
         fingerprint_icon.setOnClickListener(v -> fingerPrint());
         initIconApp();
         initPatternListeners();
+
+
     }
 
     private void initIconApp() {
@@ -169,21 +183,23 @@ public class PatternLockAct extends AppCompatActivity {
 
                 // Handling the change pattern case
                 if (getIntent().getBooleanExtra("changePattern", false)) {
-                    // Check if user is in the first step of setting a new pattern
                     if (utilspassword.isFirststep()) {
-                        userpassword = pwd; // Save the new pattern
-                        utilspassword.setFirststep(false); // Move to confirmation step
+                        userpassword = pwd;  // Save the new pattern
+                        utilspassword.setFirststep(false);  // Move to confirmation step
                         patternLockView.clearPattern();
                         status_password.setText("Confirm your new pattern");
                     } else {
-                        // Confirm the pattern
                         if (userpassword.equals(pwd)) {
-                            utilspassword.setPassword(userpassword); // Save new confirmed pattern
+                            utilspassword.setPassword(userpassword);  // Save new confirmed pattern
                             status_password.setText(utilspassword.STATUS_PASSWORD_CORRECT);
-                            finish(); // Finish activity after successful pattern change
+
+                            // Save new pattern in persistent storage (e.g., SharedPreferences, PaperDB)
+                            Paper.book().write("pattern_lock", userpassword);
+
+                            finish();  // Finish activity after successful pattern change
                         } else {
                             status_password.setText(utilspassword.STATUS_PASSWORD_INCORRECT);
-                            patternLockView.clearPattern(); // Reset pattern lock for retry
+                            patternLockView.clearPattern();  // Reset pattern lock for retry
                         }
                     }
                     return;
@@ -207,6 +223,9 @@ public class PatternLockAct extends AppCompatActivity {
                             patternLockView.clearPattern(); // Retry pattern confirmation
                         }
                     }
+                } else if (getIntent().getBooleanExtra("resetPattern", false)) {
+
+
                 } else {
                     // Verifying existing pattern during login/unlock
                     if (utilspassword.isCorrect(pwd)) {
@@ -278,8 +297,10 @@ public class PatternLockAct extends AppCompatActivity {
         finish();
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if (utilspassword.getPassword() == null && !utilspassword.isFirststep()) {
             utilspassword.setFirststep(true);
             status_password.setText(utilspassword.STATUS_FIRST_STEP);
@@ -297,23 +318,13 @@ public class PatternLockAct extends AppCompatActivity {
         isVibrationEnabled = Paper.book().read("vibration_enabled", false);  // Reload the state
     }
 
-    private void vibrate(int duration) {
-        if (isVibrationEnabled) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
-            } else {
-                vibrator.vibrate(duration);
-            }
-        }
-    }
-
     private void fingerPrint() {
         Executor executor = ContextCompat.getMainExecutor(this);
         androidx.biometric.BiometricPrompt biometricPrompt = new androidx.biometric.BiometricPrompt(PatternLockAct.this, executor, new androidx.biometric.BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 super.onAuthenticationError(errorCode, errString);
-            //    Toast.makeText(PatternLockAct.this, "Fingerprint authentication error", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(PatternLockAct.this, "Fingerprint authentication error", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -325,16 +336,17 @@ public class PatternLockAct extends AppCompatActivity {
             @Override
             public void onAuthenticationFailed() {
                 super.onAuthenticationFailed();
-           //     Toast.makeText(PatternLockAct.this, "Fingerprint authentication failed", Toast.LENGTH_SHORT).show();
+                //     Toast.makeText(PatternLockAct.this, "Fingerprint authentication failed", Toast.LENGTH_SHORT).show();
             }
         });
 
         androidx.biometric.BiometricPrompt.PromptInfo promptInfo = new androidx.biometric.BiometricPrompt.PromptInfo.Builder()
                 .setTitle("Fingerprint Authentication")
                 .setSubtitle("Unlock the app using your fingerprint")
-                .setNegativeButtonText("Cancel")
+                .setNegativeButtonText("Use Pattern")
                 .build();
 
         biometricPrompt.authenticate(promptInfo);
     }
+
 }

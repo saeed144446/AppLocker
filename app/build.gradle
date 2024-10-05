@@ -49,6 +49,7 @@ dependencies {
     implementation libs.constraintlayout
     implementation libs.lifecycle.process
     implementation libs.firebase.auth
+    implementation 'androidx.credentials:credentials:1.0.0'
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
@@ -64,4 +65,5 @@ dependencies {
     implementation 'com.github.Shashank02051997:FancyAlertDialog-Android:0.3'
     implementation 'androidx.biometric:biometric:1.2.0-alpha03'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
 }
